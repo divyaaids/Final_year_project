@@ -1,0 +1,16 @@
+pip install flask pandas scikit-learn joblib serial pyserial
+
+#To preprocess the dataset
+python preprocess_data.py
+
+#To extract features from the dataset
+python extract_feature.py
+
+#To train model
+python train_model.py
+
+#Open 127.0.0.1:5000 and prdict
+python predict.py
+
+#To append real data
+python append_data.py
