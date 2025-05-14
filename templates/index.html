@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Health Monitor Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .dashboard {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      color: #2c3e50;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      color: #7f8c8d;
+      font-size: 1.1rem;
+    }
+
+    .cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card h3 {
+      color: #7f8c8d;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+
+    .card .value {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .suggestion-box {
+      background: #3498db;
+      color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      grid-column: 1 / -1;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .suggestion-box p {
+      font-size: 1.2rem;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 1rem;
+      }
+
+      .cards-container {
+        grid-template-columns: 1fr;
+      }
+
+      .card .value {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="header">
+      <h1>Health Monitoring Dashboard</h1>
+      <p>Real-time biometric data analysis</p>
+    </div>
+
+    <div class="cards-container">
+      <div class="card">
+        <h3>PPG Signal</h3>
+        <div class="value" id="ppg">N/A</div>
+      </div>
+
+      <div class="card">
+        <h3>Heart Rate</h3>
+        <div class="value" id="hr">N/A</div>
+      </div>
+
+      <div class="card">
+        <h3>Glucose Prediction</h3>
+        <div class="value" id="glucose">N/A</div>
+      </div>
+    </div>
+
+    <div class="suggestion-box">
+      <p id="suggestion">Waiting for data...</p>
+    </div>
+  </div>
+
+  <script>
+    function updateData() {
+      fetch('/data')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('ppg').textContent = data.PPG_Signal;
+          document.getElementById('hr').textContent = data.Heart_Rate;
+          document.getElementById('glucose').textContent = data.Glucose_Prediction;
+          document.getElementById('suggestion').textContent = data.Suggestion;
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+
+    setInterval(updateData, 1000); // Auto-refresh every 1 second
+    updateData(); // Initial load
+  </script>
+</body>
+</html>
